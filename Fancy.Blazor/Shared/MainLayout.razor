@@ -13,7 +13,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h5">MudBlazorWasm1</MudText>
+            <MudText Typo="Typo.h5">Fancy</MudText>
         </MudDrawerHeader>
         <MudDivider/>
         <NavMenu/>
@@ -24,7 +24,7 @@
 </MudLayout>
 
 @code {
-    bool _drawerOpen = true;
+    bool _drawerOpen;
 
     void DrawerToggle()
     {

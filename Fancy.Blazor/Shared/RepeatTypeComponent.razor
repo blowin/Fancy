@@ -1,0 +1,51 @@
+﻿@using Fancy.Domain
+
+<MudGrid>
+    <MudItem xs="8" sm="8" md="8">
+        <MudSelect T="RepeatTypeDescriptor" Label="Окончание" AnchorOrigin="Origin.BottomCenter" @bind-Value="SelectValue">
+            @foreach (var descriptor in Descriptors)
+            {
+                <MudSelectItem Value="@(descriptor)">@descriptor.Name</MudSelectItem>   
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="4" sm="4" md="4">
+        <MudNumericField @bind-Value="Amount" Label="Окончание" Variant="Variant.Outlined" Min="0" Max="@SelectValue.MaxValue" Step="@SelectValue.Step" />
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    private static readonly RepeatTypeDescriptor[] Descriptors = 
+    {
+        new("Сколько раз в год",  int.MaxValue, 1m, v => new MultipleInYearRepeatType((int) v)),
+        new("Сколько раз в месяц",  int.MaxValue, 1m, v => new MultipleInMonthRepeatType((int) v)),
+        new("Через сколько лет", decimal.MaxValue, 0.1m, v => new DurationYearRepeatType(v)),
+    };
+    
+    private RepeatTypeDescriptor SelectValue { get; set; } = Descriptors[0];
+    private decimal Amount { get; set; } = 1;
+
+    public RepeatType GetRepeatType() => SelectValue.RepeatTypeFactory(Amount);
+
+    public class RepeatTypeDescriptor
+    {
+        public string Name { get; }
+        
+        public decimal MaxValue { get; }
+        
+        public decimal Step { get; }
+        
+        public Func<decimal, RepeatType> RepeatTypeFactory { get; }
+
+        public RepeatTypeDescriptor(string name, decimal maxValue, decimal step, Func<decimal, RepeatType> repeatTypeFactory)
+        {
+            Name = name;
+            RepeatTypeFactory = repeatTypeFactory;
+            Step = step;
+            MaxValue = maxValue;
+        }
+
+        public override string ToString() => Name;
+    }
+}

@@ -1,11 +1,89 @@
 ﻿@page "/"
+@using Fancy.Domain.Expenses
 
 <MudGrid Class="mt-4">
-    <MudItem xs="12" sm="12" md="12">
-        <MudText Typo="Typo.h3">Hello, world!</MudText>
-        <MudText Typo="Typo.subtitle1">Welcome to your new app.</MudText>
+    <MudItem xs="3" sm="3" md="3">
+        <MudTextField @bind-Value="_expenseName" Label="Название траты" Variant="Variant.Text"></MudTextField>
     </MudItem>
-    <MudItem xs="12" sm="12" md="12">
-        <SurveyPrompt Title="How is Blazor working for you?"/>
+    <MudItem xs="2" sm="2" md="2">
+        <MudNumericField @bind-Value="_expenseAmount" Label="Сумма" Variant="Variant.Text" Min="0" />
     </MudItem>
+    <MudItem xs="5" sm="5" md="5">
+        <RepeatTypeComponent @ref="_repeatTypeComponent"></RepeatTypeComponent>
+    </MudItem>
+    <MudItem xs="2" sm="2" md="2">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Add">Добавить</MudButton>
+    </MudItem>
+
+    <MudItem xs="6" sm="6" md="6">
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12">Планируемые траты</MudItem>
+            <MudItem xs="12" sm="12" md="12">
+                    <MudTable Items="@_expenses" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+                        <HeaderContent>
+                            <MudTh>Название</MudTh>
+                            <MudTh>Сумма</MudTh>
+                            <MudTh>Повторение</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Название">@context.Name</MudTd>
+                            <MudTd DataLabel="Сумма">@context.Amount</MudTd>
+                            <MudTd DataLabel="Повторение">@context.RepeatType</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudItem>
+        </MudGrid>
+    </MudItem>
+    
+    @if (_monthExpenses.Count > 0)
+    {
+        <MudItem xs="6" sm="6" md="6">
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="12">Ежемесячные траты</MudItem>
+                <MudItem xs="12" sm="12" md="12">
+                    <MudTable Items="@_monthExpenses" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+                        <HeaderContent>
+                            <MudTh>Название</MudTh>
+                            <MudTh>Сумма</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Название">@context.Name</MudTd>
+                            <MudTd DataLabel="Сумма">@context.Amount</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    }
 </MudGrid>
+
+@code{
+    private string? _expenseName;
+    private decimal _expenseAmount;
+    private RepeatTypeComponent _repeatTypeComponent = null!;
+
+    private readonly List<Expense> _expenses = new();
+
+    private IList<MonthExpense> _monthExpenses = Array.Empty<MonthExpense>();
+
+    [Inject]
+    public ExpenseCalculator ExpenseCalculator { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Calculate();
+    }
+
+    private void Add()
+    {
+        var ex = new Expense(_expenseName ?? string.Empty, _expenseAmount, _repeatTypeComponent.GetRepeatType());
+        _expenses.Add(ex);
+        Calculate();
+    }
+
+    private void Calculate()
+    {
+        _monthExpenses = ExpenseCalculator.Calculate(_expenses).ToList();
+    }
+}

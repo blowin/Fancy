@@ -63,13 +63,13 @@ public sealed class MultipleInMonthRepeatType : RepeatType
 
 public sealed class DurationYearRepeatType : RepeatType
 {
-    public DurationYearRepeatType(decimal duration) => Duration = Math.Ceiling(duration);
+    public DurationYearRepeatType(decimal duration) => Duration = duration;
 
-    public override string Name => $"Через {Duration:F1} лет";
+    public override string Name => $"Через {Duration:1.#} лет";
     
     public decimal Duration { get; }
 
-    public override decimal MonthlyAmount(decimal amount) => amount / (12.0m * Duration);
+    public override decimal MonthlyAmount(decimal amount) => Math.Ceiling(amount / (12.0m * Duration));
 
     public override bool Equals(RepeatType? other) => other is DurationYearRepeatType type && type.Duration == Duration;
 
