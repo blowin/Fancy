@@ -18,13 +18,13 @@
 
     private static readonly RepeatTypeDescriptor[] Descriptors = 
     {
-        new("Сколько раз в год",  int.MaxValue, 1m, v => new MultipleInYearRepeatType((int) v)),
         new("Сколько раз в месяц",  int.MaxValue, 1m, v => new MultipleInMonthRepeatType((int) v)),
         new("Через сколько лет", decimal.MaxValue, 0.1m, v => new DurationYearRepeatType(v)),
+        new("Сколько раз в год",  int.MaxValue, 1m, v => new MultipleInYearRepeatType((int) v)),
     };
     
     private RepeatTypeDescriptor SelectValue { get; set; } = Descriptors[0];
-    private decimal Amount { get; set; } = 1;
+    private decimal Amount { get; set; }
 
     public RepeatType GetRepeatType() => SelectValue.RepeatTypeFactory(Amount);
 

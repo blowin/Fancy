@@ -65,7 +65,7 @@ public sealed class DurationYearRepeatType : RepeatType
 {
     public DurationYearRepeatType(decimal duration) => Duration = duration;
 
-    public override string Name => $"Через {Duration:1.#} лет";
+    public override string Name => $"Через {Duration:0.#} лет";
     
     public decimal Duration { get; }
 
