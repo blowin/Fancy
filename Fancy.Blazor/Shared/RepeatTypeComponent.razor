@@ -24,7 +24,7 @@
     };
     
     private RepeatTypeDescriptor SelectValue { get; set; } = Descriptors[0];
-    private decimal Amount { get; set; }
+    private decimal Amount { get; set; } = 1;
 
     public RepeatType GetRepeatType() => SelectValue.RepeatTypeFactory(Amount);
 
