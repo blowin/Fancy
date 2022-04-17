@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fancy.Blazor", "Fancy.Blazor\Fancy.Blazor.csproj", "{15DDEEA9-6924-41F3-9A50-BE3FFBB15873}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fancy.Domain", "Fancy.Domain\Fancy.Domain.csproj", "{93B54FF0-930B-407C-A838-796765C6DFE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fancy.Test", "Fancy.Test\Fancy.Test.csproj", "{4FF1157A-5509-4EA9-83B5-C1ABF21C163D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{15DDEEA9-6924-41F3-9A50-BE3FFBB15873}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15DDEEA9-6924-41F3-9A50-BE3FFBB15873}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15DDEEA9-6924-41F3-9A50-BE3FFBB15873}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B54FF0-930B-407C-A838-796765C6DFE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B54FF0-930B-407C-A838-796765C6DFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B54FF0-930B-407C-A838-796765C6DFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B54FF0-930B-407C-A838-796765C6DFE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FF1157A-5509-4EA9-83B5-C1ABF21C163D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF1157A-5509-4EA9-83B5-C1ABF21C163D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FF1157A-5509-4EA9-83B5-C1ABF21C163D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FF1157A-5509-4EA9-83B5-C1ABF21C163D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
