@@ -26,6 +26,10 @@ jobs:
     - name: Change base-tag in index.html from / to Fancy
       run: sed -i 's/<base href="\/" \/>/<base href="\/Fancy\/" \/>/g' release/wwwroot/index.html
 
+    # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
+    - name: Add .nojekyll file
+      run: touch release/wwwroot/.nojekyll
+
     - name: Uploading files to gh-pages branch
       uses: JamesIves/github-pages-deploy-action@4.1.4
       with:
