@@ -22,6 +22,10 @@ jobs:
     - name: Publish .NET Core Project
       run: dotnet publish Fancy.Blazor/Fancy.Blazor.csproj -c Release --output release --nologo
 
+    # changes the base-tag in index.html from '/' to 'Fancy' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to Fancy
+      run: sed -i 's/<base href="\/" \/>/<base href="\/Fancy\/" \/>/g' release/wwwroot/index.html
+
     - name: Uploading files to gh-pages branch
       uses: JamesIves/github-pages-deploy-action@4.1.4
       with:
