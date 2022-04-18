@@ -1,21 +1,22 @@
 ﻿@page "/"
+@using Fancy.Blazor.Expenses
+@using Fancy.Domain
 @using Fancy.Domain.Expenses
 
 <MudGrid Class="mt-4">
-    <MudItem xs="3" sm="3" md="3">
+    <MudItem xs="12" sm="5" md="3">
         <MudTextField @bind-Value="_expenseName" Label="Название траты" Variant="Variant.Text"></MudTextField>
     </MudItem>
-    <MudItem xs="2" sm="2" md="2">
+    <MudItem xs="12" sm="5" md="2">
         <MudNumericField @bind-Value="_expenseAmount" Label="Сумма" Variant="Variant.Text" Min="0" />
     </MudItem>
-    <MudItem xs="5" sm="5" md="5">
+    <MudItem xs="12" sm="5" md="5">
         <RepeatTypeComponent @ref="_repeatTypeComponent"></RepeatTypeComponent>
     </MudItem>
-    <MudItem xs="2" sm="2" md="2">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Add">Добавить</MudButton>
+    <MudItem xs="12" sm="5" md="2">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async () => await Add())">Добавить</MudButton>
     </MudItem>
-
-    <MudItem xs="6" sm="6" md="6">
+    <MudItem xs="12" sm="12" md="6">
         <MudGrid>
             <MudItem xs="12" sm="12" md="12">Планируемые траты</MudItem>
             <MudItem xs="12" sm="12" md="12">
@@ -24,11 +25,15 @@
                             <MudTh>Название</MudTh>
                             <MudTh>Сумма</MudTh>
                             <MudTh>Повторение</MudTh>
+                            <MudTh></MudTh>
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd DataLabel="Название">@context.Name</MudTd>
                             <MudTd DataLabel="Сумма">@context.Amount</MudTd>
                             <MudTd DataLabel="Повторение">@context.RepeatType</MudTd>
+                            <MudTd DataLabel="Действие">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="Удалить" OnClick="@(async () => await Remove(@context))"></MudIconButton>
+                            </MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudItem>
@@ -37,7 +42,7 @@
     
     @if (_monthExpenses.Count > 0)
     {
-        <MudItem xs="6" sm="6" md="6">
+        <MudItem xs="12" sm="12" md="6">
             <MudGrid>
                 <MudItem xs="12" sm="12" md="12">Ежемесячные траты</MudItem>
                 <MudItem xs="12" sm="12" md="12">
@@ -65,28 +70,39 @@
     private decimal _expenseAmount;
     private RepeatTypeComponent _repeatTypeComponent = null!;
 
-    private readonly List<Expense> _expenses = new();
+    private List<Expense> _expenses = null!;
 
     private IList<MonthExpense> _monthExpenses = Array.Empty<MonthExpense>();
 
     [Inject]
     public ExpenseCalculator ExpenseCalculator { get; set; } = null!;
 
-    protected override void OnInitialized()
+    [Inject]
+    public ExpensesStore ExpensesStore { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        _expenses = await ExpensesStore.LoadExpensesAsync();
         Calculate();
     }
 
-    private void Add()
+    private async ValueTask Add()
     {
         var ex = new Expense(_expenseName ?? string.Empty, _expenseAmount, _repeatTypeComponent.GetRepeatType());
         _expenses.Add(ex);
+        await ExpensesStore.SaveExpensesAsync(_expenses);
         Calculate();
     }
 
     private void Calculate()
     {
         _monthExpenses = ExpenseCalculator.Calculate(_expenses).ToList();
+    }
+
+    private async ValueTask Remove(Expense expense)
+    {
+        _expenses.Remove(expense);
+        await ExpensesStore.SaveExpensesAsync(_expenses);
+        Calculate();
     }
 }

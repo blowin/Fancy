@@ -1,7 +1,7 @@
 ﻿@using Fancy.Domain
 
 <MudGrid>
-    <MudItem xs="8" sm="8" md="8">
+    <MudItem xs="12" sm="8" md="8">
         <MudSelect T="RepeatTypeDescriptor" Label="Окончание" AnchorOrigin="Origin.BottomCenter" @bind-Value="SelectValue">
             @foreach (var descriptor in Descriptors)
             {
@@ -9,7 +9,7 @@
             }
         </MudSelect>
     </MudItem>
-    <MudItem xs="4" sm="4" md="4">
+    <MudItem xs="12" sm="4" md="4">
         <MudNumericField @bind-Value="Amount" Label="Окончание" Variant="Variant.Outlined" Min="0" Max="@SelectValue.MaxValue" Step="@SelectValue.Step" />
     </MudItem>
 </MudGrid>
