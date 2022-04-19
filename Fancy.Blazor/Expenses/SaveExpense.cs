@@ -14,7 +14,7 @@ namespace Fancy.Blazor.Expenses
         public SaveExpense(Expense expense)
         {
             Name = expense.Name;
-            Amount = expense.Amount;
+            Amount = expense.Amount.Value;
 
             (RepeatTypeTimes, RepeatType) = expense.RepeatType.Match(yr => ((decimal)yr.RepeatTimes, SaveRepeatTypeType.MultipleInYear),
                 month => ((decimal)month.RepeatTimes, SaveRepeatTypeType.MultipleInMonth),
@@ -26,7 +26,7 @@ namespace Fancy.Blazor.Expenses
             Name = String.Empty;
         }
 
-        public Expense ToExpense() => new Expense(Name, Amount, GetRepeatType());
+        public Expense ToExpense() => new Expense(Name, new Money(Amount), GetRepeatType());
 
         private RepeatType GetRepeatType()
         {

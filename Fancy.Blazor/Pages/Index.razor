@@ -61,7 +61,7 @@
                             <MudTd DataLabel="Сумма">@context.Amount</MudTd>
                         </RowTemplate>
                         <FooterContent>
-                            <MudTh colspan="2">Общая сумма: @_monthExpenses.Sum((e) => e.Amount)</MudTh>
+                            <MudTh>Общая сумма: @ExpenseCalculator.Sum(_monthExpenses)</MudTh>
                         </FooterContent>
                     </MudTable>
                 </MudItem>

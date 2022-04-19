@@ -2,7 +2,7 @@
 
 public class ExpenseCalculator
 {
-    public IEnumerable<MonthExpense> CalculateWithSafetyBag(ICollection<Expense> expenses, SafeBagPlan safeBagPlan, decimal currentAmountOfMoneyInSafeBag = 0)
+    public IEnumerable<MonthExpense> CalculateWithSafetyBag(ICollection<Expense> expenses, SafeBagPlan safeBagPlan, Money currentAmountOfMoneyInSafeBag = default)
     {
         var safeBagExpense = safeBagPlan.ToExpense(expenses, currentAmountOfMoneyInSafeBag);
         if (safeBagExpense == null)
@@ -15,16 +15,19 @@ public class ExpenseCalculator
         foreach (var (name, amount, repeatType) in expenses)
         {
             var monthlyAmount = repeatType.MonthlyAmount(amount);
-            yield return new MonthExpense(name, Math.Ceiling(monthlyAmount));
+            yield return new MonthExpense(name, monthlyAmount.Ceiling);
         }
     }
 
-    public decimal Sum(ICollection<Expense> expenses)
+    public Money Sum(ICollection<Expense> expenses)
     {
         var monthExpenses = Calculate(expenses);
         return Sum(monthExpenses);
     }
     
-    public decimal Sum(IEnumerable<MonthExpense> expenses) 
-        => expenses.Select(e => e.Amount).DefaultIfEmpty(0).Sum();
+    public Money Sum(IEnumerable<MonthExpense> expenses)
+    {
+        var sum = expenses.Select(e => e.Amount.Value).DefaultIfEmpty(0).Sum();
+        return new Money(sum);
+    }
 }

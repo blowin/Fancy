@@ -1,3 +1,3 @@
 ﻿namespace Fancy.Domain.Expenses;
 
-public record Expense(string Name, decimal Amount, RepeatType RepeatType);
+public record Expense(string Name, Money Amount, RepeatType RepeatType);

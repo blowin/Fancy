@@ -9,7 +9,7 @@ public abstract class RepeatType : IEquatable<RepeatType>
 {
     public abstract string Name { get; }
 
-    public abstract decimal MonthlyAmount(decimal amount);
+    public abstract Money MonthlyAmount(Money amount);
 
     public abstract TRes Match<TRes>(Func<MultipleInYearRepeatType, TRes> multipleInYearRepeatType,
         Func<MultipleInMonthRepeatType, TRes> multipleInMonthRepeatType,
@@ -46,7 +46,7 @@ public sealed class MultipleInYearRepeatType : RepeatType
 
     public override string Name => $"{RepeatTimes} раз в год";
 
-    public override decimal MonthlyAmount(decimal amount) => (amount * RepeatTimes) / 12.0m;
+    public override Money MonthlyAmount(Money amount) => (amount * RepeatTimes) / 12.0m;
     
     public override bool Equals(RepeatType? other) => other is MultipleInYearRepeatType type && type.RepeatTimes == RepeatTimes;
 
@@ -70,7 +70,7 @@ public sealed class MultipleInMonthRepeatType : RepeatType
 
     public override string Name => $"{RepeatTimes} раз в месяц";
 
-    public override decimal MonthlyAmount(decimal amount) => amount * RepeatTimes;
+    public override Money MonthlyAmount(Money amount) => amount * RepeatTimes;
     
     public override bool Equals(RepeatType? other) => other is MultipleInMonthRepeatType type && type.RepeatTimes == RepeatTimes;
 
@@ -92,7 +92,11 @@ public sealed class DurationYearRepeatType : RepeatType
     
     public decimal Duration { get; }
 
-    public override decimal MonthlyAmount(decimal amount) => Math.Ceiling(amount / (12.0m * Duration));
+    public override Money MonthlyAmount(Money amount)
+    {
+        var calculateMoney = amount / (12.0m * Duration);
+        return calculateMoney.Ceiling;
+    }
 
     public override bool Equals(RepeatType? other) => other is DurationYearRepeatType type && type.Duration == Duration;
 

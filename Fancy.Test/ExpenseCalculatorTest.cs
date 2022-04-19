@@ -11,7 +11,7 @@ public class ExpenseCalculatorTest
 {
     [Theory]
     [MemberData(nameof(Data.Expenses), MemberType = typeof(Data))]
-    public void Calculate(List<Expense> expenses, SafeBagPlan safeBagPlan, int currentAmountOfMoneyInSafeBag, List<MonthExpense> expectExpenses)
+    public void Calculate(List<Expense> expenses, SafeBagPlan safeBagPlan, Money currentAmountOfMoneyInSafeBag, List<MonthExpense> expectExpenses)
     {
         var calculator = new ExpenseCalculator();
         
@@ -31,28 +31,28 @@ public class ExpenseCalculatorTest
                 {
                     new List<Expense>
                     {
-                        new("Еда", 300, MultipleInMonthRepeatType.Once),
-                        new("Квартира", 400, MultipleInMonthRepeatType.Once),
-                        new("Комуналка", 100, MultipleInMonthRepeatType.Once),
+                        new("Еда", new Money(300), MultipleInMonthRepeatType.Once),
+                        new("Квартира", new Money(400), MultipleInMonthRepeatType.Once),
+                        new("Комуналка", new Money(100), MultipleInMonthRepeatType.Once),
 
-                        new("Отпуск", 3000, MultipleInYearRepeatType.Once),
+                        new("Отпуск", new Money(3000), MultipleInYearRepeatType.Once),
 
-                        new("Покупка квартиры", 100_000, new DurationYearRepeatType(2.5m)),
-                        new("Покупка машины", 35_000, new DurationYearRepeatType(2.5m)),
+                        new("Покупка квартиры", new Money(100_000), new DurationYearRepeatType(2.5m)),
+                        new("Покупка машины", new Money(35_000), new DurationYearRepeatType(2.5m)),
                     },
                     new SafeBagPlan(TimeSpan.FromDays(183)),
-                    6000,
+                    new Money(6000),
                     
                     new List<MonthExpense>
                     {
-                        new("Еда", 300),
-                        new("Квартира", 400),
-                        new("Комуналка", 100),
+                        new("Еда", new Money(300)),
+                        new("Квартира", new Money(400)),
+                        new("Комуналка", new Money(100)),
 
-                        new("Отпуск", 250),
+                        new("Отпуск", new Money(250)),
 
-                        new("Покупка квартиры", 3334),
-                        new("Покупка машины", 1167),
+                        new("Покупка квартиры", new Money(3334)),
+                        new("Покупка машины", new Money(1167)),
                     }
                 };
                 
@@ -60,24 +60,24 @@ public class ExpenseCalculatorTest
                 {
                     new List<Expense> {},
                     new SafeBagPlan(TimeSpan.FromDays(183)),
-                    6000,
+                    new Money(6000),
                     new List<MonthExpense>{}
                 };
                 
                 yield return new object[]
                 {
-                    new List<Expense>{ new("Еда", 300, MultipleInMonthRepeatType.Once) },
+                    new List<Expense>{ new("Еда", new Money(300), MultipleInMonthRepeatType.Once) },
                     new SafeBagPlan(TimeSpan.FromDays(183)),
-                    1800,
-                    new List<MonthExpense> { new("Еда", 300) }
+                    new Money(1800),
+                    new List<MonthExpense> { new("Еда", new Money(300)) }
                 };
                 
                 yield return new object[]
                 {
-                    new List<Expense> { new("Еда", 300, MultipleInMonthRepeatType.Once), },
+                    new List<Expense> { new("Еда", new Money(300), MultipleInMonthRepeatType.Once), },
                     new SafeBagPlan(TimeSpan.FromDays(183)),
-                    1799,
-                    new List<MonthExpense> { new("Еда", 300), new(SafeBagPlan.FundraisingName, 1), }
+                    new Money(1799),
+                    new List<MonthExpense> { new("Еда", new Money(300)), new(SafeBagPlan.FundraisingName, new Money(1)), }
                 };
             }
         }

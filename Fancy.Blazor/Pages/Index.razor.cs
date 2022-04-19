@@ -1,5 +1,6 @@
 ﻿using Fancy.Blazor.Expenses;
 using Fancy.Blazor.Shared;
+using Fancy.Domain;
 using Fancy.Domain.Expenses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -31,7 +32,7 @@ namespace Fancy.Blazor.Pages
 
         private async ValueTask Add()
         {
-            var ex = new Expense(_expenseName ?? string.Empty, _expenseAmount, _repeatTypeComponent.GetRepeatType());
+            var ex = new Expense(_expenseName ?? string.Empty, new Money(_expenseAmount), _repeatTypeComponent.GetRepeatType());
             _expenses.Add(ex);
             await ExpensesStore.SaveExpensesAsync(_expenses);
             Calculate();
