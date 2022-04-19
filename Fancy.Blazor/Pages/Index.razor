@@ -18,6 +18,8 @@
     </MudItem>
     <MudItem xs="12" sm="12" md="6">
         <MudGrid>
+            <MudItem xs="6" sm="6" md="6"><MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@(async () => await ExpenseImportExportService.ExportAsync(_expenses))"/></MudItem>
+      
             <MudItem xs="12" sm="12" md="12">Планируемые траты</MudItem>
             <MudItem xs="12" sm="12" md="12">
                     <MudTable Items="@_expenses" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
@@ -80,6 +82,9 @@
     [Inject]
     public ExpensesStore ExpensesStore { get; set; } = null!;
 
+    [Inject]
+    public ExpenseImportExportService ExpenseImportExportService { get; set; } = null!;
+
     protected override async Task OnInitializedAsync()
     {
         _expenses = await ExpensesStore.LoadExpensesAsync();
@@ -104,5 +109,10 @@
         _expenses.Remove(expense);
         await ExpensesStore.SaveExpensesAsync(_expenses);
         Calculate();
+    }
+
+    private void LoadExpenses()
+    {
+        
     }
 }
